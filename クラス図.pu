@@ -1,0 +1,35 @@
+
+@startuml Good
+
+class SalesTaxRate
+class PriceExcludingTax
+class PriceIncludingTax
+PriceIncludingTax : {static}From(PriceExcludingTax, SalesTaxRate)
+
+PriceIncludingTax ..> PriceExcludingTax
+PriceIncludingTax ..> SalesTaxRate
+
+@enduml
+
+@startuml Bad
+
+class PriceExcludingTax
+PriceExcludingTax : Multi(SalesTaxRate): PriceIncludingTax
+
+class PriceIncludingTax
+class SalesTaxRate
+
+note as PriceExcludingTaxComment
+本来、税抜価格はそれ単体で成り立つ概念なのにも関わらず
+税込価格と消費税率に依存しており、現実の概念のあり方とクラス設計が乖離しているためNG
+end note
+
+PriceExcludingTax ..> PriceIncludingTax
+PriceExcludingTax ..> SalesTaxRate
+
+PriceIncludingTax ..> PriceExcludingTax
+PriceIncludingTax .ri.> SalesTaxRate
+
+PriceExcludingTax .up. PriceExcludingTaxComment
+
+@enduml
